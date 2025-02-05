@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -7,16 +8,24 @@ const Navbar = () => {
 
   const navItems = {
     gr: [
-      { name: 'Αρχική', href: '#home' },
-      { name: 'Προορισμοί', href: '#destinations' },
-      { name: 'Υπηρεσίες', href: '#services' },
-      { name: 'Επικοινωνία', href: '#contact' },
+      { name: 'Αρχική', href: '/' },
+      { name: 'Προορισμοί', href: '/destinations' },
+      { name: 'Ακτοπλοϊκά', href: '/ferry-tickets' },
+      { name: 'Πακέτα', href: '/travel-packages' },
+      { name: 'Υπηρεσίες', href: '/services' },
+      { name: 'Σχετικά', href: '/about' },
+      { name: 'Επικοινωνία', href: '/contact' },
+      { name: 'Blog', href: '/blog' },
     ],
     en: [
-      { name: 'Home', href: '#home' },
-      { name: 'Destinations', href: '#destinations' },
-      { name: 'Services', href: '#services' },
-      { name: 'Contact', href: '#contact' },
+      { name: 'Home', href: '/' },
+      { name: 'Destinations', href: '/destinations' },
+      { name: 'Ferry Tickets', href: '/ferry-tickets' },
+      { name: 'Packages', href: '/travel-packages' },
+      { name: 'Services', href: '/services' },
+      { name: 'About', href: '/about' },
+      { name: 'Contact', href: '/contact' },
+      { name: 'Blog', href: '/blog' },
     ],
   };
 
@@ -25,20 +34,22 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <span className="font-heading text-2xl font-bold text-primary">Phila Travel</span>
+            <Link to="/" className="font-heading text-2xl font-bold text-primary">
+              Phila Travel
+            </Link>
           </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-center space-x-4">
               {navItems[language].map((item) => (
-                <a
+                <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className="nav-link"
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
               <button
                 onClick={() => setLanguage(language === 'gr' ? 'en' : 'gr')}
@@ -66,14 +77,14 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navItems[language].map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="block px-3 py-2 text-base font-medium text-primary hover:text-secondary"
                 onClick={() => setIsOpen(false)}
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
             <button
               onClick={() => {
