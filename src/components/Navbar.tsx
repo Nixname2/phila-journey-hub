@@ -34,8 +34,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
-            <Link to="/" className="font-heading text-2xl font-bold text-primary">
-              Phila Travel
+            <Link to="/" className="flex items-center">
+              <img 
+                src="/lovable-uploads/6b0cccc3-7444-4a7d-99dd-9f218152a106.png" 
+                alt="Phila Travel" 
+                className="h-12 w-auto"
+              />
             </Link>
           </div>
           
