@@ -62,7 +62,7 @@ const Contact = () => {
                   <MapPin className="h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium">Διεύθυνση:</p>
-                    <p>Λεωφόρος Ελευθερίου Βενιζέλου 34</p>
+                    <p>Ελευθερίου Βενιζέλου 34</p>
                     <p>Νέα Σμύρνη, 17121</p>
                   </div>
                 </div>
@@ -71,9 +71,9 @@ const Contact = () => {
                   <Phone className="h-5 w-5 text-primary" />
                   <div>
                     <p className="font-medium">Τηλέφωνα:</p>
-                    <p>210 93 10 555</p>
-                    <p>210 93 10 556</p>
-                    <p>210 93 10 557</p>
+                    <p>210 9310 555</p>
+                    <p>210 9310 556</p>
+                    <p>210 9310 557</p>
                   </div>
                 </div>
 
