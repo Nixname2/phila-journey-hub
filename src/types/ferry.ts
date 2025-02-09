@@ -9,6 +9,9 @@ export interface FerryRoute {
   company: string;
   vessel: string;
   availableSeats: number;
+  image: string;
+  carPrice?: number;
+  petPrice?: number;
 }
 
 export interface SearchParams {
@@ -16,4 +19,7 @@ export interface SearchParams {
   arrivalPort: string;
   date: string;
   passengers: number;
+  cars?: number;
+  pets?: number;
 }
+

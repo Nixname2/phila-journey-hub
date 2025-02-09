@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar as CalendarIcon, Ship } from 'lucide-react';
+import { Calendar as CalendarIcon, Ship, Car, Dog } from 'lucide-react';
 import { searchRoutes } from '../api/mockFerryApi';
 import { FerryRoute } from '../types/ferry';
 import { useToast } from '@/components/ui/use-toast';
@@ -14,6 +14,8 @@ const FerryTickets = () => {
   const [arrivalPort, setArrivalPort] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [passengers, setPassengers] = useState<string>('');
+  const [cars, setCars] = useState<string>('0');
+  const [pets, setPets] = useState<string>('0');
   const [routes, setRoutes] = useState<FerryRoute[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -35,6 +37,8 @@ const FerryTickets = () => {
         arrivalPort,
         date,
         passengers: parseInt(passengers),
+        cars: parseInt(cars),
+        pets: parseInt(pets),
       });
       setRoutes(results);
       
@@ -54,6 +58,17 @@ const FerryTickets = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const calculateTotalPrice = (route: FerryRoute) => {
+    let total = route.price * parseInt(passengers);
+    if (route.carPrice && parseInt(cars) > 0) {
+      total += route.carPrice * parseInt(cars);
+    }
+    if (route.petPrice && parseInt(pets) > 0) {
+      total += route.petPrice * parseInt(pets);
+    }
+    return total.toFixed(2);
   };
 
   return (
@@ -89,6 +104,9 @@ const FerryTickets = () => {
                   <SelectItem value="piraeus">Πειραιάς</SelectItem>
                   <SelectItem value="rafina">Ραφήνα</SelectItem>
                   <SelectItem value="lavrio">Λαύριο</SelectItem>
+                  <SelectItem value="volos">Βόλος</SelectItem>
+                  <SelectItem value="thessaloniki">Θεσσαλονίκη</SelectItem>
+                  <SelectItem value="heraklion">Ηράκλειο</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -105,6 +123,10 @@ const FerryTickets = () => {
                   <SelectItem value="paros">Πάρος</SelectItem>
                   <SelectItem value="naxos">Νάξος</SelectItem>
                   <SelectItem value="milos">Μήλος</SelectItem>
+                  <SelectItem value="ios">Ίος</SelectItem>
+                  <SelectItem value="skiathos">Σκιάθος</SelectItem>
+                  <SelectItem value="skopelos">Σκόπελος</SelectItem>
+                  <SelectItem value="tinos">Τήνος</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -137,6 +159,35 @@ const FerryTickets = () => {
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Αυτοκίνητα</label>
+              <Select value={cars} onValueChange={setCars}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Αριθμός αυτοκινήτων" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">Χωρίς αυτοκίνητο</SelectItem>
+                  <SelectItem value="1">1 Αυτοκίνητο</SelectItem>
+                  <SelectItem value="2">2 Αυτοκίνητα</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Κατοικίδια</label>
+              <Select value={pets} onValueChange={setPets}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Αριθμός κατοικιδίων" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">Χωρίς κατοικίδιο</SelectItem>
+                  <SelectItem value="1">1 Κατοικίδιο</SelectItem>
+                  <SelectItem value="2">2 Κατοικίδια</SelectItem>
+                  <SelectItem value="3">3 Κατοικίδια</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="mt-6 flex justify-center">
@@ -164,18 +215,39 @@ const FerryTickets = () => {
                       <p className="text-sm text-gray-500">Εταιρεία</p>
                       <p className="font-medium">{route.company}</p>
                       <p className="text-sm text-gray-500">{route.vessel}</p>
+                      {route.image && (
+                        <img 
+                          src={route.image} 
+                          alt={route.vessel} 
+                          className="mt-2 rounded-md w-full h-32 object-cover"
+                        />
+                      )}
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Αναχώρηση</p>
                       <p className="font-medium">{route.departureTime}</p>
+                      <div className="mt-2 space-y-1">
+                        {parseInt(cars) > 0 && (
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Car className="h-4 w-4 mr-1" />
+                            <span>{route.carPrice}€ / αυτοκίνητο</span>
+                          </div>
+                        )}
+                        {parseInt(pets) > 0 && (
+                          <div className="flex items-center text-sm text-gray-600">
+                            <Dog className="h-4 w-4 mr-1" />
+                            <span>{route.petPrice}€ / κατοικίδιο</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Άφιξη</p>
                       <p className="font-medium">{route.arrivalTime}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm text-gray-500">Τιμή</p>
-                      <p className="text-xl font-bold text-primary">{route.price.toFixed(2)}€</p>
+                      <p className="text-sm text-gray-500">Συνολική Τιμή</p>
+                      <p className="text-xl font-bold text-primary">{calculateTotalPrice(route)}€</p>
                       <Button size="sm" className="mt-2">
                         Κράτηση
                       </Button>
@@ -216,3 +288,4 @@ const FerryTickets = () => {
 };
 
 export default FerryTickets;
+
